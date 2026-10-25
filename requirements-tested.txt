@@ -1,0 +1,8 @@
+# Versions used in local Python 3.13.5 tests; not a complete lockfile.
+fastapi==0.128.2
+uvicorn==0.48.0
+httpx==0.28.1
+pydantic==2.13.5
+python-dotenv==1.2.2
+pytest==9.0.2
+pytest-asyncio==1.3.0

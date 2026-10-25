@@ -1,0 +1,13 @@
+services:
+  riskinsight:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      PORT: "8000"
+      DATABASE_PATH: /app/data/portfolio.sqlite
+    restart: unless-stopped
+    # No volume is needed: the synthetic dataset is recreated deterministically.
+    # For real data a managed DB, access control and separate ingestion are required.

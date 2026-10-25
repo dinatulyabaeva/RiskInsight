@@ -1,0 +1,31 @@
+{
+  "archive": "RiskInsight_project.zip",
+  "clean_extraction": true,
+  "initial_database_absent": true,
+  "health": {
+    "status": "ok",
+    "version": "1.0.0",
+    "database_exists": true,
+    "mode": "demo",
+    "llm_configured": false,
+    "auth_required": false
+  },
+  "loans": 10000,
+  "mcp_tools": [
+    "get_dataset_context",
+    "get_npl_trend"
+  ],
+  "database_created": true,
+  "routes_checked": [
+    "/",
+    "/presentation",
+    "/static/app.js",
+    "/static/app.css",
+    "/api/health",
+    "/api/ready",
+    "/api/context",
+    "/api/dashboard",
+    "/api/chat"
+  ],
+  "status": "passed"
+}

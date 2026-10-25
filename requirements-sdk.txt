@@ -1,0 +1,3 @@
+# Optional independent interoperability test with the v1 official MCP Python SDK.
+# Deliberately pinned below v2: v2 changes the client API.
+mcp==1.26.0

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: riskinsight
+    runtime: docker
+    healthCheckPath: /api/health
+    envVars:
+      - key: APP_MODE
+        value: demo
+      - key: APP_ACCESS_TOKEN
+        generateValue: true
+      - key: SEED_LOANS
+        value: "10000"
+      - key: MAX_CONCURRENT_REQUESTS
+        value: "2"
+      - key: REQUESTS_PER_MINUTE
+        value: "12"
+      - key: LLM_BASE_URL
+        value: https://api.openai.com/v1
+    # Configure LLM_API_KEY and LLM_MODEL privately in the dashboard,
+    # then switch APP_MODE=llm. No keys in Git or Docker build arguments.

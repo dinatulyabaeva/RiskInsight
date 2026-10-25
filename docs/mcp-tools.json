@@ -1,0 +1,658 @@
+{
+  "tools": [
+    {
+      "name": "get_dataset_context",
+      "description": "Получить доступные даты, фильтры, определения метрик и ограничения. Вызывай первым для нового анализа.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "title": "Empty",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_portfolio_summary",
+      "description": "Объем портфеля, число кредитов, DPD 1+/30+/60+/90+, взвешенная ставка и учебный EL на одном срезе. Доли возвращаются 0..1.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Дата доступного среза; null = последний",
+            "title": "As Of"
+          }
+        },
+        "title": "Snapshot",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_delinquency_distribution",
+      "description": "Взаимоисключающие корзины DPD: 0, 1–29, 30–59, 60–89, 90+. Доли по остатку задолженности.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Дата доступного среза; null = последний",
+            "title": "As Of"
+          }
+        },
+        "title": "Snapshot",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_npl_trend",
+      "description": "Помесячные показатели и изменение DPD90+ в процентных пунктах. Остатки разных дат нельзя суммировать.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Start Date"
+          },
+          "end_date": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "End Date"
+          }
+        },
+        "title": "Period",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "analyze_segment",
+      "description": "Сравнить продукты, регионы или рейтинги по риску, объему и вкладу. Сортировка по выбранной метрике.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Дата доступного среза; null = последний",
+            "title": "As Of"
+          },
+          "dimension": {
+            "default": "product",
+            "enum": [
+              "product",
+              "region",
+              "risk_band"
+            ],
+            "title": "Dimension",
+            "type": "string"
+          },
+          "metric": {
+            "default": "npl90_ratio",
+            "enum": [
+              "npl90_ratio",
+              "balance_rub",
+              "npl90_balance_rub",
+              "el_ratio"
+            ],
+            "title": "Metric",
+            "type": "string"
+          }
+        },
+        "title": "Segments",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "get_top_risk_segments",
+      "description": "Топ сегментов по доле DPD90+ с отсечением малых сегментов, не причинный анализ.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Дата доступного среза; null = последний",
+            "title": "As Of"
+          },
+          "dimension": {
+            "default": "region",
+            "enum": [
+              "product",
+              "region",
+              "risk_band"
+            ],
+            "title": "Dimension",
+            "type": "string"
+          },
+          "limit": {
+            "default": 5,
+            "maximum": 20,
+            "minimum": 1,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "min_loans": {
+            "default": 30,
+            "maximum": 10000,
+            "minimum": 1,
+            "title": "Min Loans",
+            "type": "integer"
+          }
+        },
+        "title": "Ranking",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "explain_npl_change",
+      "description": "Разложить изменение доли DPD90+ на внутрисегментный риск и изменение структуры. Точное арифметическое разложение, НЕ доказательство причин.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "start_date": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "title": "End Date",
+            "type": "string"
+          },
+          "dimension": {
+            "default": "product",
+            "enum": [
+              "product",
+              "region",
+              "risk_band"
+            ],
+            "title": "Dimension",
+            "type": "string"
+          }
+        },
+        "required": [
+          "start_date",
+          "end_date"
+        ],
+        "title": "Drivers",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "run_stress_scenario",
+      "description": "What-if: умножить PD и добавить п.п. к LGD; PD/LGD <=1. EAD фиксирован. Возвращает учебные потери, НЕ прогноз и НЕ IFRS9 ECL.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.product",
+            "title": "Product"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Точное значение из get_dataset_context.filters.region",
+            "title": "Region"
+          },
+          "risk_band": {
+            "anyOf": [
+              {
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Risk Band"
+          },
+          "as_of": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Дата доступного среза; null = последний",
+            "title": "As Of"
+          },
+          "pd_multiplier": {
+            "default": 1.5,
+            "description": "Множитель PD, не процентов",
+            "maximum": 5,
+            "minimum": 1,
+            "title": "Pd Multiplier",
+            "type": "number"
+          },
+          "lgd_add_pp": {
+            "default": 5,
+            "description": "Прибавка LGD в процентных пунктах",
+            "maximum": 50,
+            "minimum": 0,
+            "title": "Lgd Add Pp",
+            "type": "number"
+          }
+        },
+        "title": "Stress",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "check_data_quality",
+      "description": "Проверить полноту срезов, диапазоны, связи и целостность SQLite. Не проверяет реалистичность синтетических PD/LGD.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "title": "Empty",
+        "type": "object"
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}

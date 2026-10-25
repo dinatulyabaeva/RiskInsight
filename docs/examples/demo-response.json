@@ -1,0 +1,217 @@
+{
+  "mode": "demo",
+  "answer": "Обзор качества портфеля\nСрез: 2026-09-30. Синтетические данные. [T1]\n\nПортфель: 17 437 741 203 ₽; кредитов: 10000. Взвешенная ставка: 15,64%. [T2]\n\nDPD 30+: 6,02%. DPD 90+: 4,57%; проблемный остаток: 797 406 074 ₽. [T2]\n\nУчебный EL: 504 773 286 ₽. Он не является IFRS 9 ECL или прогнозом. [T2]\n\nРаспределение корзин: 0: 92,70%; 1–29: 1,28%; 30–59: 0,75%; 60–89: 0,69%; 90+: 4,57%. [T3]\n\nРежим DEMO: шаблонный отчет по выбранному сценарию, без вызова LLM. Свободный вопрос в этом режиме не интерпретируется.",
+  "trace": [
+    {
+      "ref": "T1",
+      "tool": "get_dataset_context",
+      "arguments": {},
+      "ok": true,
+      "result": {
+        "dataset": "synthetic-v1-seed42",
+        "synthetic": true,
+        "currency": "RUB",
+        "dates": [
+          "2025-10-31",
+          "2025-11-30",
+          "2025-12-31",
+          "2026-01-31",
+          "2026-02-28",
+          "2026-03-31",
+          "2026-04-30",
+          "2026-05-31",
+          "2026-06-30",
+          "2026-07-31",
+          "2026-08-31",
+          "2026-09-30"
+        ],
+        "latest_date": "2026-09-30",
+        "loan_count": 10000,
+        "filters": {
+          "product": [
+            "Автокредит",
+            "Ипотека",
+            "Кредитная карта",
+            "Потребительский"
+          ],
+          "region": [
+            "Приволжский",
+            "Северо-Западный",
+            "Сибирский",
+            "Уральский",
+            "Центральный"
+          ],
+          "risk_band": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ]
+        },
+        "ratio_unit": "fraction: 0.05 means 5%",
+        "delta_unit": "percentage_points",
+        "npl_definition": "Учебный proxy: DPD >= 90; не регуляторное определение NPL",
+        "el_definition": "Учебный EL = sum(balance * pd_12m * lgd); не IFRS 9 ECL",
+        "panel": "Фиксированная когорта, без новых выдач и списаний; даты — срезы, не потоки"
+      },
+      "duration_ms": 14.8
+    },
+    {
+      "ref": "T2",
+      "tool": "get_portfolio_summary",
+      "arguments": {
+        "as_of": "2026-09-30"
+      },
+      "ok": true,
+      "result": {
+        "source": "SQLite / synthetic-v1",
+        "dataset": "synthetic-v1-seed42",
+        "synthetic": true,
+        "as_of": "2026-09-30",
+        "filters": {},
+        "currency": "RUB",
+        "metrics": {
+          "loan_count": 10000,
+          "balance_rub": 17437741203.08,
+          "npl90_balance_rub": 797406074.0,
+          "npl90_count": 578,
+          "npl90_ratio": 0.04572875,
+          "npl90_count_ratio": 0.0578,
+          "dpd1_ratio": 0.07300958,
+          "dpd30_ratio": 0.06020547,
+          "dpd60_ratio": 0.05265719,
+          "weighted_rate": 0.15643261,
+          "el_rub": 504773285.56,
+          "el_ratio": 0.02894717
+        },
+        "empty": false
+      },
+      "duration_ms": 11.1
+    },
+    {
+      "ref": "T3",
+      "tool": "get_delinquency_distribution",
+      "arguments": {
+        "as_of": "2026-09-30"
+      },
+      "ok": true,
+      "result": {
+        "source": "SQLite / synthetic-v1",
+        "dataset": "synthetic-v1-seed42",
+        "synthetic": true,
+        "as_of": "2026-09-30",
+        "filters": {},
+        "currency": "RUB",
+        "buckets": [
+          {
+            "bucket": "0",
+            "loan_count": 8990,
+            "balance_rub": 16164619084.59,
+            "balance_share": 0.92699042
+          },
+          {
+            "bucket": "1–29",
+            "loan_count": 172,
+            "balance_rub": 223274693.96,
+            "balance_share": 0.01280411
+          },
+          {
+            "bucket": "30–59",
+            "loan_count": 140,
+            "balance_rub": 131625044.42,
+            "balance_share": 0.00754829
+          },
+          {
+            "bucket": "60–89",
+            "loan_count": 120,
+            "balance_rub": 120816306.11,
+            "balance_share": 0.00692844
+          },
+          {
+            "bucket": "90+",
+            "loan_count": 578,
+            "balance_rub": 797406074.0,
+            "balance_share": 0.04572875
+          }
+        ],
+        "balance_rub": 17437741203.08
+      },
+      "duration_ms": 9.7
+    }
+  ],
+  "protocol": {
+    "transport": "stdio",
+    "server": {
+      "name": "riskinsight-analytics",
+      "version": "1.0.0"
+    },
+    "events": [
+      {
+        "direction": "out",
+        "method": "initialize",
+        "id": 1
+      },
+      {
+        "direction": "in",
+        "id": 1,
+        "error": false
+      },
+      {
+        "direction": "out",
+        "method": "notifications/initialized",
+        "notification": true
+      },
+      {
+        "direction": "out",
+        "method": "tools/list",
+        "id": 2
+      },
+      {
+        "direction": "in",
+        "id": 2,
+        "error": false
+      },
+      {
+        "direction": "out",
+        "method": "tools/call",
+        "id": 3
+      },
+      {
+        "direction": "in",
+        "id": 3,
+        "error": false
+      },
+      {
+        "direction": "out",
+        "method": "tools/call",
+        "id": 4
+      },
+      {
+        "direction": "in",
+        "id": 4,
+        "error": false
+      },
+      {
+        "direction": "out",
+        "method": "tools/call",
+        "id": 5
+      },
+      {
+        "direction": "in",
+        "id": 5,
+        "error": false
+      }
+    ]
+  },
+  "usage": {
+    "llm_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0
+  },
+  "warnings": [],
+  "duration_ms": 627,
+  "scope": {
+    "as_of": null,
+    "filters": {}
+  }
+}

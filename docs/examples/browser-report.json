@@ -1,0 +1,11 @@
+{
+  "transport": "local fetch bridge to real HTTP",
+  "errors": [],
+  "evidence_expanded": true,
+  "filtered_count": "4 096",
+  "dashboard_export": "riskinsight-dashboard.json",
+  "report_export": "riskinsight-report.md",
+  "evidence_export": "riskinsight-evidence.json",
+  "mobile_horizontal_overflow": false,
+  "presentation_metric": "3,53%"
+}
